@@ -1,0 +1,8 @@
+Serialization\SuccessSerialization.class
+Serialization\SignInSerialization.class
+Serialization\Serialization.class
+Controller\ActionServlet.class
+Controller\SignInAction.class
+Controller\VerifyConnexionAction.class
+Controller\Action.class
+Controller\SignUpAction.class

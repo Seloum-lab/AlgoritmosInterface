@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="h1 container text-center my-5">Sign in</div>
+        <div class="container d-flex flex-column align-items-center pt-5">
+            <input class="text-center rounded w-25 justify-content-center mb-5" id="mail" type="email" name="mail" placeholder="mail">
+            <input class="text-center rounded w-25 justify-content-center mb-5" id="password" type="password" placeholder="password" name="password">
+            <button class="btn btn-primary my-5" id="connect">Submit</button>
+        </div>
+    </body>
+    
+    
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url : "./ActionServlet",
+                method : "POST",
+                data : {
+                    todo : "verifyConnexion"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (response.success) {
+                    $(location).attr("href", "index.html");
+                }
+            }).fail(function () {
+                window.alert("Echec");
+            });
+            
+            
+            $("#connect").on("click", function() {
+                let mail = $("#mail").val();
+                let password = $("#password").val();
+                
+                $.ajax({
+                    url : "./ActionServlet",
+                    method : "Post",
+                    data : {
+                        todo : "signIn",
+                        mail : mail,
+                        rawPassword : password
+                    },
+                    dataType : "json"
+                }).done(function(response) {
+                    if (response.connexion) {
+                        $(location).attr("href", "index.html");
+                    } else {
+                        $("#mail").val("");
+                        $("#password").val("");
+                        window.alert("Connection failes");
+                    }
+                }).fail(function() {
+                   window.alert("Echec");
+                });
+            });
+        });
+    </script>
+</html>
