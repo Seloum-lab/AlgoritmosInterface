@@ -8,14 +8,29 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <button id="disconnect"></button>
+        <button id="disconnect" class="btn btn-danger">Disconnect</button>
     </body>
     
     <script>
         $(document).ready(function() {
+            $.ajax({
+                 url : "./ActionServlet",
+                 method : "POST",
+                 data : {
+                     todo : "verifyConnexion"
+                 },
+                 dataType: 'json'
+             }).done(function(response) {
+                 if (!response.success) {
+                     $(location).attr("href", "signIn.html");
+                 }
+             }).fail(function () {
+                 window.alert("Echec");
+             }); 
+            
             $("#disconnect").on("click", function() {
                 $.ajax({
-                    url : "method",
+                    url : "./ActionServlet",
                     method : "POST",
                     data : {
                         todo : "disconnect"

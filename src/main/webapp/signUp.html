@@ -14,8 +14,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <body>
         <div class="h1 container text-center mb-5 mt-5">Create a new account</div>
         <div class="container d-flex flex-column justify-content-center align-items-center pt-5">
-            <input class="text-center rounded w-25 justify-content-center mb-2" id="firstName" type="text" name="nombre" placeholder="First Name">
-            <input class="text-center rounded w-25 justify-content-center mb-2" id="lastName" type="text" name="role" placeholder="Last Name">
+            <input class="text-center rounded w-25 justify-content-center mb-2" autocapitalize="words" id="firstName" type="text" name="nombre" placeholder="First Name">
+            <input class="text-center rounded w-25 justify-content-center mb-2" autocapitalize="characters" id="lastName" type="text" name="role" placeholder="Last Name">
             <input class="text-center rounded w-25 justify-content-center mb-2" id="mail" type="email" name="mail" placeholder="Mail">
             <input class="text-center rounded w-25 justify-content-center mb-2" id="phoneNumber" type="text" name="role" placeholder="Phone Number">
             <input class="text-center rounded w-25 justify-content-center mb-2" id="address" type="text" name="role" placeholder="Address">
@@ -32,17 +32,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         $(document).ready(function() {
             $.ajax({
                 url : "./ActionServlet",
-                mathod : "POST",
+                method : "POST",
                 data : {
-                    todo : "verifyConnection"
+                    todo : "verifyConnexion"
                 },
                 dataType: 'json'
             }).done(function(response) {
-                if (!response.success) {
-                    $(location).attr("href", "signIn.html");
+                if (response.success) {
+                    $(location).attr("href", "index.html");
                 }
-            }).fail(function() {
-               window.alert("Echec");
+            }).fail(function () {
+                window.alert("Echec");
             });
             
             $("#go_back").on("click", function() {
@@ -52,10 +52,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             $("#sign_up").on("click", function() {
                let firstName = $("#firstName").val();
                let lastName = $("#lastName").val();
-               let mail = $("#mail").val();
-               let password = $("#password").val();
-               let phoneNumber = $("#phoneNumber");
-               let address = $("#address");
+               var mail = $("#mail").val();
+               var password = $("#password").val();
+               let phoneNumber = $("#phoneNumber").val();
+               let address = $("#address").val();
                
                
                
@@ -67,7 +67,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                       firstName : firstName,
                       lastName : lastName,
                       mail : mail,
-                      password: password,
+                      rawPassword: password,
                       phoneNumber : phoneNumber,
                       address : address
                   },
@@ -75,9 +75,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                   
                }).done(function(response) {
                    console.log(response.success);
-                   if (response.signUp) {
+                   if (response.success) {
                        console.log("success");
-                       $(location).attr("href", "index.html");
+                       $.ajax({
+                            url : "./ActionServlet",
+                            method : "Post",
+                            data : {
+                                todo : "signIn",
+                                mail : mail,
+                                rawPassword : password
+                            },
+                            dataType : "json"
+                        }).done(function(response) {
+                            if (response.success) {
+                                $(location).attr("href", "index.html");
+                            } else {
+                                $("#mail").val("");
+                                $("#password").val("");
+                                window.alert("Connection failes");
+                            }
+                        }).fail(function() {
+                           window.alert("Echec");
+                        });
+                       
                    } else {
                        window.alert("Echec");
                    }

@@ -53,7 +53,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     },
                     dataType : "json"
                 }).done(function(response) {
-                    if (response.connexion) {
+                    if (response.success) {
                         $(location).attr("href", "index.html");
                     } else {
                         $("#mail").val("");

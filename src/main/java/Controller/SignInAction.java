@@ -17,19 +17,30 @@ public class SignInAction extends Action{
 
     @Override
     public void execute(HttpServletRequest req) {
+        boolean result = false;
         HttpSession session = req.getSession(true);
         Client client = null;
-        String mail = (String) req.getAttribute("mail");
-        String rawPassword = (String) req.getAttribute("rawPassword");
+        String mail = (String) req.getParameter("mail");
+        String rawPassword = (String) req.getParameter("rawPassword");
         
         
         try {
             client = Service.authenticate(mail, rawPassword);
+            if (client != null) {
+                result = true;
+                session.setAttribute("Id", client.getId());
+                req.setAttribute("client", client);
+                System.out.println("On est bon");
+            } else {
+                result = false;
+                System.out.println("On est pas bon");
+            }
         } catch (Exception ex) {
             System.out.println(ex);
+            result = false;
         }
         
-        req.setAttribute("client", client);
+        req.setAttribute("success", result);
     }
     
 }

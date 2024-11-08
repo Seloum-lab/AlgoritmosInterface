@@ -16,12 +16,12 @@ public class SignUpAction extends Action{
     @Override
     public void execute(HttpServletRequest req) {
         boolean success;
-        String firstName = (String) req.getAttribute("firstName");
-        String lastNam = (String) req.getAttribute("lastName");
-        String mail = (String) req.getAttribute("mail");
-        String rawPassword = (String) req.getAttribute("rawPassword");
-        String phoneNumber = (String) req.getAttribute("phoneNumber");
-        String address = (String) req.getAttribute("address");
+        String firstName = (String) req.getParameter("firstName");
+        String lastNam = (String) req.getParameter("lastName");
+        String mail = (String) req.getParameter("mail");
+        String rawPassword = (String) req.getParameter("rawPassword");
+        String phoneNumber = (String) req.getParameter("phoneNumber");
+        String address = (String) req.getParameter("address");
         
         
         try {

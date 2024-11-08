@@ -16,11 +16,13 @@ public class VerifyConnexionAction extends Action{
     @Override
     public void execute(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
+        boolean success = false;
         if (session == null) {
-            req.setAttribute("success", false);
-        } else {
-            req.setAttribute("success", true);
-        }        
+            success = false;
+        } else if (session.getAttribute("Id") != null){
+            success = true;
+        }      
+        req.setAttribute("success", success);
     }
     
 }

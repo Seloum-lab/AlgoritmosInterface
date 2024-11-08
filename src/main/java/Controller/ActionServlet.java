@@ -5,8 +5,10 @@
 package Controller;
 
 import DAO.JpaUtil;
+import Serialization.PublicationListSerialization;
 import Serialization.SignInSerialization;
 import Serialization.SuccessSerialization;
+import Serialization.WorkTypeListSerialization;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -75,6 +77,31 @@ public class ActionServlet extends HttpServlet {
                     SuccessSerialization successSerialization2 = new SuccessSerialization();
                     successSerialization2.serialize(request, response);
                     break;
+                    
+                case "getWorkType" :
+                    System.out.println("--------------------------getWorkType");
+                    GetWorkTypeAction getWorkTypeAction = new GetWorkTypeAction();
+                    getWorkTypeAction.execute(request);
+                    WorkTypeListSerialization workTypeListSerialization = new WorkTypeListSerialization();
+                    workTypeListSerialization.serialize(request, response);
+                    break;
+                    
+                case "publish" :
+                    System.out.println("--------------------------publish");
+                    PublishAction publishAction = new PublishAction();
+                    publishAction.execute(request);
+                    SuccessSerialization successSerialization3 = new SuccessSerialization();
+                    successSerialization3.serialize(request, response);
+                    break;
+                    
+                case "getPublicationList" :
+                    System.out.println("--------------------------getPublicationList");
+                    GetListPublicationAction getListPublicationAction = new GetListPublicationAction();
+                    getListPublicationAction.execute(request);
+                    PublicationListSerialization publicationListSerialization = new PublicationListSerialization();
+                    publicationListSerialization.serialize(request, response);
+                    break;
+                    
                     
                 
                     

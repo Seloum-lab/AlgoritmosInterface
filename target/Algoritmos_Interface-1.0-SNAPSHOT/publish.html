@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="h1 container text-center my-5">Create a post</div>
+        <div class="container d-flex flex-column align-items-center pt-5">
+            <input class="text-center rounded w-25 justify-content-center mb-5" id="title" type="text" name="title" placeholder="title">
+            <textarea class="text-center rounded w-25 justify-content-center mb-5" id="description" placeholder="Description" name="description" rows="9" autocapitalize="on" ></textarea>
+            <select class="text-center rounded w-25 justify-content-center mb-5" id="workType" name="workType">
+                <option value="" disabled selected hidden>Choose a categorie for your work</option>
+            </select>
+            <input class="text-center rounded w-25 justify-content-center mb-5" id="price" type="number" name="price" placeholder="Price" min="10" value="25" step="0.5">
+            <input class="text-center rounded w-25 justify-content-center mb-5" id="distanceMax" type="number" name="distanceMax" placeholder="Maximum Distance" min="10" value="25">
+
+            
+            <button class="btn btn-primary my-5" id="publish" type="button">Post</button>
+        </div>
+    </body>
+    
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                 url : "./ActionServlet",
+                 method : "POST",
+                 data : {
+                     todo : "verifyConnexion"
+                 },
+                 dataType: 'json'
+             }).done(function(response) {
+                 if (!response.success) {
+                     $(location).attr("href", "signIn.html");
+                 }
+             }).fail(function () {
+                 window.alert("Echec");
+             }); 
+             
+             $.ajax({
+                 url : "./ActionServlet",
+                 method : "POST",
+                 data : {
+                     todo : "getWorkType"
+                 },
+                 dataType: 'json'
+             }).done(function(response) {
+                 if (response.success) {
+                    
+                    for (let element of response.workTypeList) {
+                        let newOption = $("<option value='" + element.name + "'>" + element.name + "</option>");
+                        $("#workType").append(newOption);
+                    }
+                        
+                 } else {
+                     window.alert("Pas pb réseau mais erreur");
+                 }
+             }).fail(function() {
+                 window.alert("Echec");
+             });
+             
+             $("#publish").on("click", function() {
+                 let workType = $("#workType").val();
+                 let price = $("#price").val();
+                 let title = $("#title").val();
+                 let description = $("#description").val();
+                 let distanceMax = $("#distanceMax").val();
+                $.ajax({
+                    url : "./ActionServlet",
+                    method : "POST",
+                    data : {
+                        todo : "publish",
+                        workType : workType,
+                        price : price,
+                        title : title,
+                        descrpition : description,
+                        distanceMax : distanceMax
+                    },
+                    dataType: 'json'
+                }).done(function(response) {
+                    if (response.success) {
+                        $(location).attr("href", "index.html");
+                    }
+                }).fail(function() {
+                    window.alert("Echec");
+                });
+             });
+         });
+         
+         
+        
+    </script>
+</html>
