@@ -5,7 +5,13 @@
 package Controller;
 
 import Metier.Service.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.ProcessBuilder.Redirect.Type;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -20,13 +26,23 @@ public class TakeAppointmentAction extends Action {
         boolean success = false;
         HttpSession session = req.getSession(false);
         Long idClient = (Long) session.getAttribute("Id");
-        Long idPublication = Long.getLong(req.getParameter("idPublication"));
-        int start = Integer.parseInt(req.getParameter("start"));
-        int duration = Integer.parseInt(req.getParameter("duration"));
-        LocalDate date = LocalDate.parse(req.getParameter("date"));
+        Long idPublication = (Long) session.getAttribute("publicationId");
+        String durationString = req.getParameter("duration");
+        Gson gson = new Gson();
+        java.lang.reflect.Type type = new TypeToken<Map<Integer, Set<Integer>>>(){}.getType();
+        Map<Integer, Set<Integer>> duration = gson.fromJson(durationString, type);
+        for (Map.Entry<Integer, Set<Integer>> entry : duration.entrySet()) {
+                Integer day = entry.getKey();
+                Set<Integer> hourSet = entry.getValue();
+                for (Integer hour : hourSet) {
+                    System.out.println("day" + day + "associated with hour" + hour);
+            }
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(req.getParameter("date"), formatter);
         
         try {
-            success = Service.takeAppointment(idClient, idPublication, date, duration, start);
+            success = Service.takeAppointment(idClient, idPublication, date, duration);
         } catch (Exception ex) {
             System.out.println(ex);
         } finally {

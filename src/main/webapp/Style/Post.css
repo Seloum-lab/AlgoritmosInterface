@@ -1,0 +1,64 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 8 nov. 2024, 21:58:41
+    Author     : DeLL
+*/
+
+.post-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s;
+        background-color: #ffffff;
+    }
+    .post-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+    .post-header {
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 20px;
+        border-bottom: 3px solid #0056b3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .post-title {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #ffffff;
+        margin: 0;
+    }
+    .post-subtitle {
+        font-size: 0.9rem;
+        color: #e0e0e0;
+    }
+    .post-body {
+        padding: 20px;
+    }
+    .post-footer {
+        background-color: #f1f1f1;
+        padding: 15px;
+        font-size: 0.9rem;
+        color: #343a40;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #e0e0e0;
+    }
+    .badge-custom {
+        font-size: 0.8rem;
+        color: white;
+        background-color: #28a745;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+    .price-text {
+        color: #dc3545;
+        font-weight: bold;
+        font-size: 1rem;
+    }
