@@ -4,14 +4,28 @@
  */
 package Controller;
 
+import Controller.Admin.AddAdminAction;
+import Controller.Admin.AuthenticateAction;
+import Controller.Admin.ConnectAsClientAction;
+import Controller.Admin.GetListClient;
 import DAO.JpaUtil;
+import Metier.Service.Service;
 import Serialization.ActualDispoSerialization;
 import Serialization.DispoSerialization;
+import Serialization.AppointmentListSerialization;
+import Serialization.AppointmentSerialization;
+import Serialization.ClientListSerialization;
+import Serialization.PriceSerialization;
 import Serialization.PublicationListSerialization;
 import Serialization.SignInSerialization;
 import Serialization.SuccessSerialization;
 import Serialization.WorkTypeListSerialization;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ActionServlet", urlPatterns = {"/ActionServlet"})
 public class ActionServlet extends HttpServlet {
 
+    private ScheduledExecutorService scheduler;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,6 +53,8 @@ public class ActionServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             
@@ -190,6 +207,156 @@ public class ActionServlet extends HttpServlet {
                     successSerialization9.serialize(request, response);
                     break;
                     
+                    
+                case "receivePayment" :
+                    System.out.println("--------------------------validatePayment");
+                    ReceivePaymentAction receivePaymentAction = new ReceivePaymentAction();
+                    receivePaymentAction.execute(request);
+                    SuccessSerialization successSerialization10 = new SuccessSerialization();
+                    successSerialization10.serialize(request, response);
+                    break;
+                    
+                case "emmitPayment" :
+                    System.out.println("--------------------------emmitPayment");
+                    EmmitPaymentAction emmitPaymentAction = new EmmitPaymentAction();
+                    emmitPaymentAction.execute(request);
+                    SuccessSerialization successSerialization14 = new SuccessSerialization();
+                    successSerialization14.serialize(request, response);
+                    break;
+                    
+                    
+                    
+                case "suppressPublication" :
+                    System.out.println("--------------------------suppressPublication");
+                    SuppressPublicationAction suppressPublicationAction = new SuppressPublicationAction();
+                    suppressPublicationAction.execute(request);
+                    SuccessSerialization successSerialization11 = new SuccessSerialization();
+                    successSerialization11.serialize(request, response);
+                    break;
+                    
+                case "cancelAppointment" :
+                    System.out.println("--------------------------cancelAppointment");
+                    CancelAppointmentAction cancelAppointmentAction = new CancelAppointmentAction();
+                    cancelAppointmentAction.execute(request);
+                    SuccessSerialization successSerialization12 = new SuccessSerialization();
+                    successSerialization12.serialize(request, response);
+                    break;
+                    
+                    
+                case "getNextAppointments" :
+                    System.out.println("--------------------------getNextAppointmens");
+                    GetNextsAppointmentsAction getNextsAppointmentsAction = new GetNextsAppointmentsAction();
+                    getNextsAppointmentsAction.execute(request);
+                    AppointmentListSerialization nextAppointmentListSerialization = new AppointmentListSerialization();
+                    nextAppointmentListSerialization.serialize(request, response);
+                    break;
+                    
+                    
+                case "addNote" :
+                    System.out.println("--------------------------addNote");
+                    AddNoteAction addNoteAction = new AddNoteAction();
+                    addNoteAction.execute(request);
+                    SuccessSerialization successSerialization13 = new SuccessSerialization();
+                    successSerialization13.serialize(request, response);
+                    break;
+                    
+                case "clearSession" :
+                    System.out.println("--------------------------clearSession");
+                    ClearSessionAction clearSessionAction = new ClearSessionAction();
+                    clearSessionAction.execute(request);
+                    break;
+                    
+                case "getPassedAppointments" :
+                    System.out.println("--------------------------getPassedAppointments");
+                    GetPassedAppointmentAction getPassedAppointmentAction = new GetPassedAppointmentAction();
+                    getPassedAppointmentAction.execute(request);
+                    AppointmentListSerialization passedAppointmentListSerialization = new AppointmentListSerialization();
+                    passedAppointmentListSerialization.serialize(request, response);
+                    break;
+                    
+                    
+                case "setAppointmentSession" :
+                    System.out.println("--------------------------setAppointmentSession");
+                    SetAppointmentSessionAction setAppointmentSessionAction = new SetAppointmentSessionAction();
+                    setAppointmentSessionAction.execute(request);
+                    break;
+                    
+                case "verifyAppointment" :
+                    System.out.println("--------------------------verifyAppointment");
+                    VerifyAppointmentAction verifyAppointmentAction = new VerifyAppointmentAction();
+                    verifyAppointmentAction.execute(request);
+                    SuccessSerialization successSerialization15 = new SuccessSerialization();
+                    successSerialization15.serialize(request, response);
+                    break;
+                    
+                    
+                case "getPriceAppointment" : 
+                    System.out.println("--------------------------getPriceAppointment");
+                    GetAppointmentPriceAction getAppointmentPriceAction = new GetAppointmentPriceAction();
+                    getAppointmentPriceAction.execute(request);
+                    PriceSerialization priceSerialization = new PriceSerialization();
+                    priceSerialization.serialize(request, response);
+                    break;
+                    
+                    
+                case "appointment" :
+                    System.out.println("--------------------------appointment");
+                    GetAppointmentAction getAppointmentAction = new GetAppointmentAction();
+                    getAppointmentAction.execute(request);
+                    AppointmentSerialization appointmentSerialization = new AppointmentSerialization();
+                    appointmentSerialization.serialize(request, response);
+                    break;
+                    
+                case "authenticateAdmin" :
+                    System.out.println("--------------------------authenticateAdmin");
+                    AuthenticateAction authenticateAction = new AuthenticateAction();
+                    authenticateAction.execute(request);
+                    SuccessSerialization successSerialization16 = new SuccessSerialization();
+                    successSerialization16.serialize(request, response);
+                    break;
+                    
+                case "adminVerifyConnection" :
+                    System.out.println("--------------------------adminVerifyConnection");
+                    Controller.Admin.VerifyConnexionAction verifyConnexionActionAdmin = new Controller.Admin.VerifyConnexionAction();
+                    verifyConnexionActionAdmin.execute(request);
+                    SuccessSerialization successSerialization17 = new SuccessSerialization();
+                    successSerialization17.serialize(request, response);
+                    break;
+                    
+                case "addAdmin" :
+                    System.out.println("--------------------------addAdmin");
+                    AddAdminAction addAdminAction = new AddAdminAction();
+                    addAdminAction.execute(request);
+                    SuccessSerialization successSerialization18 = new SuccessSerialization();
+                    successSerialization18.serialize(request, response);
+                    break;
+                    
+                    
+                case "getListClient" :
+                    System.out.println("--------------------------getListClient");
+                    GetListClient getListClient = new GetListClient();
+                    getListClient.execute(request);
+                    ClientListSerialization clientListSerialization = new ClientListSerialization();
+                    clientListSerialization.serialize(request, response);
+                    break;
+                    
+                    
+                case "connectAsClient" :
+                    System.out.println("--------------------------connectAsClient");
+                    ConnectAsClientAction connectAsClientAction = new ConnectAsClientAction();
+                    connectAsClientAction.execute(request);
+                    SuccessSerialization successSerialization19 = new SuccessSerialization();
+                    successSerialization19.serialize(request, response);
+                    break;
+                    
+                case "getCanceledAppointments" :
+                    System.out.println("--------------------------getCanceledAppointments");
+                    GetCanceledAppointmentsAction getCanceledAppointmentsAction = new GetCanceledAppointmentsAction();
+                    getCanceledAppointmentsAction.execute(request);
+                    AppointmentListSerialization canceledAppointmentListSerialization = new AppointmentListSerialization();
+                    canceledAppointmentListSerialization.serialize(request, response);
+                    break;
+
             }
            
             
@@ -203,10 +370,35 @@ public class ActionServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         JpaUtil.creerFabriquePersistance();
+        Service.updatePassedAppointments();
+        LocalDateTime now = LocalDateTime.now();
+
+        // Calculez le temps jusqu'à la prochaine heure ronde
+        LocalDateTime nextHour = now.truncatedTo(ChronoUnit.HOURS).plusHours(1);
+        long initialDelay = ChronoUnit.SECONDS.between(now, nextHour) + 61;
+
+        
+        scheduler = Executors.newScheduledThreadPool(1);
+        Runnable hourlyTask = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Service.updatePassedAppointments();
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        
+        scheduler.scheduleAtFixedRate(hourlyTask, initialDelay, 1, TimeUnit.DAYS);
     }
 
     @Override
     public void destroy() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
         JpaUtil.fermerFabriquePersistance();
         super.destroy();
     }

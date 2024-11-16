@@ -31,13 +31,6 @@ public class TakeAppointmentAction extends Action {
         Gson gson = new Gson();
         java.lang.reflect.Type type = new TypeToken<Map<Integer, Set<Integer>>>(){}.getType();
         Map<Integer, Set<Integer>> duration = gson.fromJson(durationString, type);
-        for (Map.Entry<Integer, Set<Integer>> entry : duration.entrySet()) {
-                Integer day = entry.getKey();
-                Set<Integer> hourSet = entry.getValue();
-                for (Integer hour : hourSet) {
-                    System.out.println("day" + day + "associated with hour" + hour);
-            }
-        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(req.getParameter("date"), formatter);
         

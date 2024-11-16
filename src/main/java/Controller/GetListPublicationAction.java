@@ -20,9 +20,12 @@ public class GetListPublicationAction extends Action {
         boolean success = false;
         List<Publication> result = null;
         double distance = Double.parseDouble(req.getParameter("distance"));
-        
+        String workType = req.getParameter("workType");
+        if (workType == null || workType.trim().isEmpty()) {
+        workType = null;
+    }
         try {
-            result = Service.getListPublicationDistance(distance);
+            result = Service.getListPublicationDistance(distance, workType);
             success = true;
         } catch (Exception ex) {
             success = false;            

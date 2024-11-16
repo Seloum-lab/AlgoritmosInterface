@@ -27,13 +27,16 @@ public class GetActualDispoAction extends Action {
         boolean success = false;
         HttpSession session = req.getSession(false);
         Long id = Long.parseLong(req.getParameter("id"));
+        Long publicationId = null;
+
         
         try {
             if (id == -1) {
-                id = (Long) session.getAttribute("publicationId");
-                dispo = Service.getPublicationById(id).getClient().getActualDisponibilities(date);
+                publicationId = (Long) session.getAttribute("publicationId");
+                id = Service.getPublicationById(publicationId).getClient().getId();
+                dispo = Service.getActualDispo(id, date);
             } else {
-                dispo = Service.getClientById(id).getActualDisponibilities(date);
+                dispo = Service.getActualDispo(id, date);
             }
             success = true;
         } catch(Exception ex) {

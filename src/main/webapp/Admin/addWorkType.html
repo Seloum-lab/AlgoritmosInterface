@@ -22,6 +22,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     
     <script>
         $(document).ready(function() {
+            
+            $.ajax({
+                url : "../ActionServlet",
+                method : "GET",
+                data : {
+                    todo : "adminVerifyConnection"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (!response.success) {
+                    $(location).attr("href", "index.html");
+                }
+            }).fail(function() {
+                window.alert("Echec");
+            });
+            
+            
             $("#add").on('click', function() {
                 let workTypeName = $("#workTypeName").val();
                 $.ajax({
@@ -34,6 +51,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     dataType: 'json'
                 }).done(function(response) {
                     if (response.success) {
+                        $("#workTypeName").val("");
                         window.alert("Added successfully");
                     } else {
                         window.alert("problem adding");

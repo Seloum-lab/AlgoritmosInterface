@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Metier.Service.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,9 +17,21 @@ public class AddPostIdAction extends Action {
     @Override
     public void execute(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
+        boolean result = false;
+        Long id = (Long) session.getAttribute("Id");
         Long publicationId = Long.parseLong(req.getParameter("id"));
         
-        session.setAttribute("publicationId", publicationId);
+        try {
+            result = !Service.isClientPublication(id, publicationId);
+            if (result) {
+                session.setAttribute("publicationId", publicationId);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+            result = false;
+        }       
+        
+        req.setAttribute("success", result);
     }
     
 }

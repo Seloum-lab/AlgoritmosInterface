@@ -21,7 +21,9 @@ public class VerifyConnexionAction extends Action{
             success = false;
         } else if (session.getAttribute("Id") != null){
             success = true;
-        }      
+        } else {
+            success = false;
+        }     
         req.setAttribute("success", success);
     }
     

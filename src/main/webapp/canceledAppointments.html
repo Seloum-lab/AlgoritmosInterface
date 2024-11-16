@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="Style/Appointment.css" rel="stylesheet">
+        <link href="Style/NavBar.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <header class="mb-5" id="header">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">MonSite</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="feed.html">Feed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="nextAppointments.html">Nex Appointments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="passedAppointments.html">Passed Appointments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="publish.html">Publish</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="setDisponibility.html">Set your disponibilities</a>
+                            </li>
+                            <!-- Ajouter d'autres liens de pages ici -->
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        
+        <div class="container">
+            <div class="h1 text-center mb-5">Canceled Appointments</div>
+        </div>
+        
+        
+        <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-5" id="feed-client"></div>
+        <div class="d-flex flex-column align-items-center justify-content-center mt-5" id="feed-worker"></div>
+            
+    </body>
+    
+    
+    <script>
+        $(document).ready(function() {
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 1) { // Si on a scrollé de plus de 50px
+                    $('#navbar').addClass('navbar-scrolled');
+                } else {
+                    $('#navbar').removeClass('navbar-scrolled');
+                }
+            });
+            
+            $.ajax({
+                url : "./ActionServlet",
+                method : "POST",
+                data : {
+                    todo : "verifyConnexion"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (!response.success) {
+                    $(location).attr("href", "signIn.html");
+                }
+            }).fail(function () {
+                window.alert("Echec");
+            }); 
+            
+            
+            $.ajax({
+                url : "./ActionServlet",
+                method : "GET",
+                data : {
+                    todo : "getCanceledAppointments"
+                }, 
+                dataType: 'json'
+            }).done(function(response) {
+                if (response.success) {
+                    if (response.listAppointmentClient.length === 0) {
+                        $("#feed-client").append($("<div class='h1 text-centered'>You do not have any canceled appointment as a Client</div>"));
+                    } else {
+                        $("#feed-client").append($("<div class='h1 text-centered'>Your canceled appointments as a client</div>"));
+                        for (let appointment of response.listAppointmentClient) {
+                            let div = $("<div class='d-flex flex-column align-items-center justify-content-center mb-5'></div>");
+                            
+                            
+                            let card = $("<div class='card appointment-card mb-4'></div>");
+                            
+                            //Making the header
+                            let header = $("<div class='appointment-header'></div>");
+                            
+                            let headerFirstDiv = $("<div></div>");
+                            headerFirstDiv.append($("<div class='appointment-date'>Appointment taken on : <strong>"+ appointment.date +"</strong></div>"));
+                            headerFirstDiv.append($("<div class='appointment-worker'>Worker : <strong>" + appointment.workerLastName +"</strong> <small>" + appointment.workerFirstName + "</small></div>"));
+                            headerFirstDiv.append($("<div class='appointment-client'>Client : <strong>YOU</strong></div>"));
+                            
+                            let headerSecondDiv = $("<div></div>");
+                            if (appointment.paid === "true") {
+                                headerSecondDiv.append("<span class='badge-custom status-badge'>Paid</span>");
+                            } else {
+                                headerSecondDiv.append("<span class='badge-custom status-badge'>Non paid</span>");
+                            }
+                            headerSecondDiv.append($("<span class='ml-3 price-text'>$" + appointment.price + "/hour</span>"));
+                            
+                            header.append(headerFirstDiv);
+                            header.append(headerSecondDiv);
+                            
+                            
+                            //Body
+                            let body = $("<div class='appointment-body'></div>");
+                            body.append($("<p><strong>Work Type : </strong>" + appointment.workType + "</p>"));
+                            if (appointment.average) {
+                                body.append($("<p><strong>Worker's Average Note : </strong> <span class='text-primary'>" + appointment.average + "/5</span></p>"));
+                            } else {
+                                body.append($("<p><strong>The worker has not been noted yet</strong></p>"));
+                            }
+                            
+                            //Footer
+                            let footer = $("<div class='appointment-footer'></div>");
+                            footer.append("<strong>Days and Hours :</strong>");
+                            
+                            let listHours = $("<ul class='schedule-list'></ul>");
+                            for (let hours of appointment.duration) {
+                                listHours.append($("<li>" + hours.day + " from " + (8 + hours.hour) + " to " + (9 + hours.hour) +"</li>"));
+                            }
+                            footer.append(listHours);
+                            
+                            
+                            card.append(header);
+                            card.append(body);
+                            card.append(footer);
+                            
+                            div.append(card);
+                            
+                            
+                            
+                            $("#feed-client").append(div);
+                            
+                        }
+                    }
+                    
+                    
+                    if (response.listAppointmentWorker.length === 0) {
+                        $("#feed-worker").append($("<div class='h1 text-centered'>You do not have any canceled appointment as a Worker</div>"));
+                    } else {
+                        $("#feed-worker").append($("<div class='h1 text-centered'>Your canceled appointments as a worker</div>"));
+                        for (let appointment of response.listAppointmentWorker) {
+                            let div = $("<div class='d-flex flex-column align-items-center justify-content-center mb-5'></div>");
+                            
+                            let card = $("<div class='card appointment-card mb-4'></div>");
+                            
+                            //Making the header
+                            let header = $("<div class='appointment-header'></div>");
+                            
+                            let headerFirstDiv = $("<div></div>");
+                            headerFirstDiv.append($("<div class='appointment-date'>Appointment taken on : <strong>"+ appointment.date +"</strong></div>"));
+                            headerFirstDiv.append($("<div class='appointment-worker'>Worker : <strong>YOU</strong></div>"));
+                            headerFirstDiv.append($("<div class='appointment-client'>Client : <strong>" + appointment.clientLastName +"</strong> <small>" + appointment.clientFirstName + "</small></div>"));
+                            
+                            let headerSecondDiv = $("<div></div>");
+                            if (appointment.paid === "true") {
+                                headerSecondDiv.append("<span class='badge-custom status-badge'>Paid</span>");
+                            } else {
+                                headerSecondDiv.append("<span class='badge-custom status-badge'>Non paid</span>");
+                            }
+                            headerSecondDiv.append($("<span class='ml-3 price-text'>$" + appointment.price + "/hour</span>"));
+                            
+                            header.append(headerFirstDiv);
+                            header.append(headerSecondDiv);
+                            
+                            
+                            //Body
+                            let body = $("<div class='appointment-body'></div>");
+                            body.append($("<p><strong>Work Type : </strong>" + appointment.workType + "</p>"));
+                            body.append($("<p><strong>Client's address : </strong>" + appointment.clientAddress +"</p>"));
+                            
+                            //Footer
+                            let footer = $("<div class='appointment-footer'></div>");
+                            footer.append("<strong>Days and Hours :</strong>");
+                            
+                            let listHours = $("<ul class='schedule-list'></ul>");
+                            for (let hours of appointment.duration) {
+                                listHours.append($("<li>" + hours.day + " from " + (8 + hours.hour) + " to " + (9 + hours.hour) +"</li>"));
+                            }
+                            footer.append(listHours);
+                            
+                            card.append(header);
+                            card.append(body);
+                            card.append(footer);
+                            
+                            div.append(card);
+                            
+                            
+                            
+                            $("#feed-worker").append(div);                            
+                        }
+                    }
+                } else {
+                    window.alert("Problème mais pas échec");
+                }
+            }).fail(function() {
+                window.alert("Echec");
+            });
+            
+            
+            
+        });
+    </script>

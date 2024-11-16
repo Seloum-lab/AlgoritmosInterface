@@ -23,6 +23,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <script>
         $(document).ready(function() {
             $.ajax({
+                url : "../ActionServlet",
+                method : "GET",
+                data : {
+                    todo : "adminVerifyConnection"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (!response.success) {
+                    $(location).attr("href", "index.html");
+                }
+            }).fail(function() {
+                window.alert("Echec");
+            });
+            
+            
+            
+            $.ajax({
                  url : "../ActionServlet",
                  method : "GET",
                  data : {

@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -24,9 +26,11 @@ public class PublicationListSerialization extends Serialization {
 
     @Override
     public void serialize(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        HttpSession session = req.getSession(false);
         Gson gson = new GsonBuilder().serializeNulls().create();
         JsonObject container = new JsonObject();
         SimpleDateFormat sdf = new SimpleDateFormat("d 'of' MMMM, yyyy");
+        Long clientId = (Long) session.getAttribute("Id");
         
         List<Publication> publicationList = (List<Publication>) req.getAttribute("publicationList");
         
@@ -35,6 +39,9 @@ public class PublicationListSerialization extends Serialization {
         } else {
             JsonArray publicationListJson = new JsonArray();
             for (Publication element : publicationList) {
+                if (Objects.equals(element.getClient().getId(), clientId)) {
+                    continue;
+                }
                 JsonObject publicationJson = new JsonObject();
                 publicationJson.addProperty("workType", element.getWorkType().getWorktype());
                 publicationJson.addProperty("id", element.getId());
@@ -43,7 +50,7 @@ public class PublicationListSerialization extends Serialization {
                 publicationJson.addProperty("note", element.getAverage());
                 publicationJson.addProperty("price", element.getPrice());
                 publicationJson.addProperty("numberNotes", element.getNumberNotes());
-                publicationJson.addProperty("publisher", element.getClient().getFirstName() + element.getClient().getLastName());
+                publicationJson.addProperty("publisher", element.getClient().getFirstName() + " " + element.getClient().getLastName());
                 publicationJson.addProperty("date", sdf.format(element.getDate()));
                 publicationListJson.add(publicationJson);
             }

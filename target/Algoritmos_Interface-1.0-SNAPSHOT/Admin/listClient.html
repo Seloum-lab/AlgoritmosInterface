@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="h1 container text-center my-5">List of all the Clients</div>
+        <table id="table" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">mail</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Connect As</th>
+                </tr>
+            </thead>
+            
+            <tbody id="table-body">
+                
+            </tbody>
+            
+            
+        </table>
+    </body>
+    
+    
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url : "../ActionServlet",
+                method : "POST",
+                data : {
+                    todo : "adminVerifyConnection"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (!response.success) {
+                    $(location).attr("href", "index.html");
+                }
+            }).fail(function () {
+                window.alert("Echec");
+            });
+            
+            
+            $.ajax({
+                url : "../ActionServlet",
+                method : "GET",
+                data : {
+                    todo : "getListClient"
+                },
+                dataType: 'json'
+            }).done(function(response) {
+                if (response.success) {
+                    for (let client of response.clientList) {
+                        let tr = $("<tr></tr>");
+                        
+                        let idTh = $("<th scope='row'>" + client.id + "</th>");
+                        let mailTh = $("<th>" + client.mail + "</th>");
+                        let firstNameTh = $("<th>" + client.firstName + "</th>");
+                        let lastNameTh = $("<th>" + client.lastName + "</th>");
+                        let buttonTh = $("<th></th>");
+                        
+                        let button = $("<button class='btn btn-primary'>Connect As</button>");
+                        button.on("click", function() {
+                            $.ajax({
+                                url : "../ActionServlet",
+                                method : "POST",
+                                data : {
+                                    todo : "connectAsClient",
+                                    id : client.id
+                                },
+                                dataType: 'json'
+                            }).done(function(response) {
+                                if (response.success) {
+                                    $(location).attr("href", "../index.html");
+                                } else {
+                                    window.alert("Problem mais pas echec");
+                                }
+                            }).fail(function() {
+                                window.alrt("Echec");
+                            });
+                        });
+                        buttonTh.append(button);
+                        
+                        tr.append(idTh);
+                        tr.append(mailTh);
+                        tr.append(firstNameTh);
+                        tr.append(lastNameTh);
+                        tr.append(buttonTh);
+                        
+                        $("#table-body").append(tr);
+                    }
+                } else {
+                    window.alert("Probleme mais pas Echec");
+                }
+            }).fail(function() {
+                window.alert("Echec");
+            });
+            
+        });
+    </script>
+</html>
