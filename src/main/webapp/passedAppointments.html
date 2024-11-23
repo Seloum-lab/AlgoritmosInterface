@@ -39,7 +39,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <li class="nav-item">
                                 <a class="nav-link" href="setDisponibility.html">Set your disponibilities</a>
                             </li>
-                            <!-- Ajouter d'autres liens de pages ici -->
+                            <li>
+                                <button class="btn btn-danger" id="deconnexion">Disconnect</button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -83,6 +85,49 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             }).fail(function () {
                 window.alert("Echec");
             }); 
+            
+            
+            $.ajax({
+                 url : "./ActionServlet",
+                 method : "POST",
+                 data : {
+                     todo : "adminVerifyConnection"
+                 },
+                 dataType: 'json'
+             }).done(function(response) {
+                 if (response.success) {
+                     let li = $("<li></li>");
+                     let button = $("<button class='btn btn-warning'>Disconnect From Client</button>");
+                     button.on("click", function() {
+                         $.ajax({
+                             url : "./ActionServlet",
+                             method : "POST",
+                             data : {
+                                 todo : "disconnectClient"
+                             }
+                         }).done(function() {
+                             $(location).attr("href", "Admin/index.html");
+                         }).fail(function() {
+                             window.alert("Echec");
+                         });
+                     });
+                     li.append(button);
+                     
+                     li.insertBefore($("#disconnect-li"));
+                     
+                 }
+             }).fail(function() {
+                 window.alert("Echec");
+             });
+            
+            
+            $.ajax({
+                url : "./ActionServlet",
+                method : "POST",
+                data : {
+                    todo : "clearSession"
+                }
+            });
             
             
             $.ajax({
@@ -142,10 +187,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             
                             let button;
                             if (appointment.received) {
-                                button = $("<button class='btn btn-primary'>Already Paid</button>");
-                            } else if (appointment.emmitted) {
-                                button = $("<button class='btn btn-primary'>Waiting for confirmation</button>");
-                                } else {
                                 button = $("<button class='btn btn-success'>Add a note (the payment is done)</button>");
                                 button.on("click", function() {
                                     $.ajax({
@@ -159,6 +200,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                         $(location).attr("href", "addNote.html");
                                     }).fail(function() {
                                         window.alert("Echec");
+                                    });
+                                });
+                            } else if (appointment.emmitted) {
+                                button = $("<button class='btn btn-warning'>Waiting for confirmation</button>");
+                            } else {
+                                button = $("<button class='btn btn-success'>Pay</button>");
+                                button.on("click", function() {
+                                    $.ajax({
+                                        utl : "./ActionServlet",
+                                        method : "POST",
+                                        data : {
+                                            todo : "setAppointmentSession",
+                                            appointmentId : appointment.id
+                                        }
+                                    }).done(function() {
+                                        $(location).attr("href", "payment.html");
+                                    }).fail(function() {
+                                        window.alrt("Echec");
                                     });
                                 });
                             }
@@ -221,11 +280,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             
                             let button;
                             if (appointment.received) {
-                                button = $("<button class='btn btn-primary'>Payment Done</button>");
+                                button = $("<button class='btn btn-success'>Payment Done</button>");
                             } else if (appointment.emmitted) {
-                                button = $("<button class='btn btn-primary'>Waiting for you confirmation</button>");
+                                button = $("<button class='btn btn-primary'>Confirm you received the payment</button>");
+                                button.on("click", function() {
+                                    $.ajax({
+                                        url : "./ActionServlet",
+                                        method : "POST",
+                                        data : {
+                                            todo : "setAppointmentSession",
+                                            appointmentId : appointment.id
+                                        }
+                                    }).done(function() {
+                                        $(location).attr("href", "declarePayment.html");
+                                    }).fail(function() {
+                                        window.alert("Echec");
+                                    });
+                                });
                             } else {
                                 button = $("<button class='btn btn-primary'>Declare that you received payment</button>");
+                                button.on("click", function() {
+                                    $.ajax({
+                                        url : "./ActionServlet",
+                                        method : "POST",
+                                        data : {
+                                            todo : "setAppointmentSession",
+                                            appointmentId : appointment.id
+                                        }
+                                    }).done(function() {
+                                        $(location).attr("href", "declarePayment.html");
+                                    }).fail(function() {
+                                        window.alert("Echec");
+                                    });
+                                });
                             }
                             
                             
@@ -240,6 +327,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }).fail(function() {
                 window.alert("Echec");
+            });
+            
+            
+            
+            $("#deconnexion").on("click", function() {
+                $.ajax({
+                    url : "./ActionServlet",
+                    method : "POST",
+                    data : {
+                        todo : "disconnect"
+                    },
+                    dataType: 'json'
+                }).done(function(response) {
+                    if (response.success) {
+                        $(location).attr("href", "signIn.html");
+                    }
+                }).fail(function() {
+                    window.alert("Echec");
+                });
             });
             
             

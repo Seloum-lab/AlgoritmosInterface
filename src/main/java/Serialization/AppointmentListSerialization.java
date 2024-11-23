@@ -65,7 +65,10 @@ public class AppointmentListSerialization extends Serialization{
                     if (appointment.getPayment() != null) {
                     appointmentJson.addProperty("emmitted", appointment.getPayment().isEmmited());
                     appointmentJson.addProperty("received", appointment.getPayment().isReceived());
-                }
+                } else {
+                    appointmentJson.addProperty("emmitted", false);
+                    appointmentJson.addProperty("received", false);
+                    }
                 appointmentJson.add("duration", dateJson);
                 appointmentJson.addProperty("workerFirstName", appointment.getPublication().getClient().getFirstName());
                 appointmentJson.addProperty("workerLastName", appointment.getPublication().getClient().getLastName());
@@ -108,6 +111,9 @@ public class AppointmentListSerialization extends Serialization{
                     if (appointment.getPayment() != null) {
                         appointmentJson.addProperty("emmitted", appointment.getPayment().isEmmited());
                         appointmentJson.addProperty("received", appointment.getPayment().isReceived());
+                    } else {
+                        appointmentJson.addProperty("emmitted", false);
+                        appointmentJson.addProperty("received", false);
                     }
                     appointmentJson.addProperty("note", appointment.getNote());
                     appointmentJson.add("duration", dateJson);

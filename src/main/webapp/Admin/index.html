@@ -6,87 +6,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Admin Navigation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .button-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            transition: background-color 0.3s;
-        }
-        .button-container button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <h1>Admin Navigation</h1>
-    <div class="button-container">
-        <button onclick="window.location.href='addAdmin.html'">Add Admin</button>
-        <button onclick="window.location.href='addWorkType.html'">Add Work Type</button>
-        <button onclick="window.location.href='approvePost.html'">Approve Post</button>
-        <button onclick="window.location.href='index.html'">Home</button>
-        <button onclick="window.location.href='listClient.html'">List Client</button>
-        <button onclick="window.location.href='signIn.html'">Sign In</button>
-        <button class="btn btn-danger w-100" id="disconnect">Disconnect</button>
-
-    </div>
-</body>
+    </head>
+<body></body>
 
 
 <script>
-    $(document).ready(function() {
-        $.ajax({
-                url : "../ActionServlet",
-                method : "POST",
-                data : {
-                    todo : "adminVerifyConnection"
-                },
-                dataType: 'json'
-            }).done(function(response) {
-                if (!response.success) {
-                    $(location).attr("href", "signIn.html");
-                }
-            }).fail(function () {
-                window.alert("Echec");
-            });
-            
-            
-        $("#disconnect").on("click", function() {
-            $.ajax({
-                url : "../ActionServlet",
-                method : "POST",
-                data : {
-                    todo : "disconnect"
-                },
-                dataType: 'json'
-            }).done(function(response) {
-                $(location).attr("href", "signIn.html");
-            }).fail(function() {
-                window.alert("Echec");
-            });
-        });
-    });
+    $(location).attr("href", "listClient.html");
 </script>
 </html>

@@ -39,6 +39,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             });
             
             
+            $.ajax({
+                url : "./ActionServlet",
+                method : "POST",
+                data : {
+                    todo : "disconnect"
+                }
+            });
+            
+            
             $("#connect").on("click", function() {
                 let mail = $("#mail").val();
                 let password = $("#password").val();

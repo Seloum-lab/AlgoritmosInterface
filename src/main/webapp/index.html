@@ -4,81 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEB-INF Navigation</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            text-align: center;
-        }
-        .btn {
-            margin: 10px 0;
-        }
-    </style>
+    
 </head>
 <body>
-    <div class="container">
-        <h1 class="mb-4">WEB-INF Navigation</h1>
-        <button class="btn btn-primary w-100" onclick="window.location.href='declarePayment.html'">Declare Payment</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='feed.html'">Feed</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='garbage.html'">Garbage</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='index.html'">Home</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='nextAppointments.html'">Next Appointments</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='passedAppointments.html'">Passed Appointments</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='payment.html'">Payment</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='publish.html'">Publish</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='setDisponibility.html'">Set Disponibility</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='signIn.html'">Sign In</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='signUp.html'">Sign Up</button>
-        <button class="btn btn-primary w-100" onclick="window.location.href='takeAppointment.html'">Take Appointment</button>
-        <button class="btn btn-danger w-100" id="disconnect">Disconnect</button>
-
-    </div>
 </body>
 
 <script>
-    $(document).ready(function() {
-        
-        $.ajax({
-                url : "./ActionServlet",
-                method : "POST",
-                data : {
-                    todo : "verifyConnexion"
-                },
-                dataType: 'json'
-            }).done(function(response) {
-                if (!response.success) {
-                    $(location).attr("href", "signIn.html");
-                }
-            }).fail(function () {
-                window.alert("Echec");
-            }); 
-        
-        
-        $("#disconnect").on("click", function() {
-                $.ajax({
-                    url : "./ActionServlet",
-                    method : "POST",
-                    data : {
-                        todo : "disconnect"
-                    },
-                    dataType: 'json'
-                }).done(function(response) {
-                    $(location).attr("href", "signIn.html");
-                }).fail(function() {
-                    window.alert("Echec");
-                });
-            });
-    });
+    window.location = "feed.html";
 </script>
+
 </html>

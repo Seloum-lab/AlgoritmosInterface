@@ -1,5 +1,6 @@
 Controller\Admin\AuthenticateAction.class
 Controller\GetDispoAction.class
+Controller\Admin\DisconnectFromClientAction.class
 Controller\PublishAction.class
 Serialization\PriceSerialization.class
 Controller\VerifyConnexionAction.class

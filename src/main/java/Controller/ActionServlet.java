@@ -7,6 +7,7 @@ package Controller;
 import Controller.Admin.AddAdminAction;
 import Controller.Admin.AuthenticateAction;
 import Controller.Admin.ConnectAsClientAction;
+import Controller.Admin.DisconnectFromClientAction;
 import Controller.Admin.GetListClient;
 import DAO.JpaUtil;
 import Metier.Service.Service;
@@ -356,6 +357,12 @@ public class ActionServlet extends HttpServlet {
                     AppointmentListSerialization canceledAppointmentListSerialization = new AppointmentListSerialization();
                     canceledAppointmentListSerialization.serialize(request, response);
                     break;
+                    
+                    
+                case "disconnectClient" :
+                    System.out.println("--------------------------disconnectClient");
+                    DisconnectFromClientAction disconnectFromClientAction = new DisconnectFromClientAction();
+                    disconnectFromClientAction.execute(request);
 
             }
            

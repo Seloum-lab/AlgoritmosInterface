@@ -49,6 +49,40 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 window.alert("Echec");
             });
             
+            
+            $.ajax({
+                 url : "./ActionServlet",
+                 method : "POST",
+                 data : {
+                     todo : "adminVerifyConnection"
+                 },
+                 dataType: 'json'
+             }).done(function(response) {
+                 if (response.success) {
+                     let li = $("<li></li>");
+                     let button = $("<button class='btn btn-warning'>Disconnect From Client</button>");
+                     button.on("click", function() {
+                         $.ajax({
+                             url : "./ActionServlet",
+                             method : "POST",
+                             data : {
+                                 todo : "disconnectClient"
+                             }
+                         }).done(function() {
+                             $(location).attr("href", "Admin/index.html");
+                         }).fail(function() {
+                             window.alert("Echec");
+                         });
+                     });
+                     li.append(button);
+                     
+                     li.insertBefore($("#disconnect-li"));
+                     
+                 }
+             }).fail(function() {
+                 window.alert("Echec");
+             });
+            
             $.ajax({
                 url : "./ActionServlet",
                 method : "POST",

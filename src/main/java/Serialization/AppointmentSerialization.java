@@ -64,9 +64,9 @@ public class AppointmentSerialization extends Serialization {
         appointmentJson.addProperty("averagePublication", appointment.getPublication().getAverage());                             
         appointmentJson.addProperty("clientAddress", appointment.getClient().getAddress());
         appointmentJson.addProperty("price", appointment.getPrice());
-        appointmentJson.addProperty("method", appointment.getPayment().getPaymentMethod().toString());
+        appointmentJson.addProperty("method", ((appointment.getPayment().getPaymentMethod() == null) ? null : appointment.getPayment().getPaymentMethod().toString()));
         
-        
+        appointmentJson.addProperty("success", success);
         
         res.setContentType("application/json;charset=UTF-8");
         PrintWriter out;
